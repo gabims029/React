@@ -7,13 +7,15 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import api from "../axios/axios"
 
 function Cadastro() {
   const [user, setUser] = useState({
+    name:"",
+    cpf:"",
+    data_nascimento:"",
     email: "",
     password: "",
-    age:"",
-    name:""
   });
 
   const onChange = (event) => {
@@ -23,7 +25,19 @@ function Cadastro() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert(`Nome: ${user.name} Idade: ${user.age} Email: ${user.email} Senha: ${user.password}`)
+    cadastro()
+  };
+
+  async function cadastro(){
+    await api.postCadastro(user).then(
+      (response) => {
+        alert(response.data.message)
+      },
+      (error) => {
+        console.log(error)
+        alert(error.response.data.error)
+      }
+    )
   }
   return (
     <Container component="main" maxWidth="xs">
@@ -55,12 +69,23 @@ function Cadastro() {
           <TextField
             required
             fullWidth
-            id="age"
-            label="Idade"
-            name="age"
+            id="cpf"
+            label="CPF"
+            name="cpf"
             margin="normal"
-            value={user.age}
+            value={user.cpf}
             onChange={onChange}
+          />
+          <TextField
+            required
+            fullWidth
+            id="data_nascimento"
+            label="Data de nascimento"
+            name="data_nascimento"
+            margin="normal"
+            value={user.data_nascimento}
+            onChange={onChange}
+            type="date"
           />
           <TextField
             required
